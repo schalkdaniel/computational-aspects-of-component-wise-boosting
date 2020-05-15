@@ -105,7 +105,7 @@ knitr::kable(
 ## Microbenchmark
 
 
-```{r, echo=FALSE}
+```{r, include=FALSE}
 nclasses = 20L
 nsim = 50000L
 
@@ -120,17 +120,14 @@ y = gmean[idx] + rnorm(nsim)
 df_cat = data.frame(x = x, y = y)
 
 
-microbenchmark::microbenchmark(
+mb = microbenchmark::microbenchmark(
   "linear" = {
    cboost_lin = Compboost$new(data = df_cat, target = "y", loss = LossQuadratic$new())
    cboost_lin$addBaselearner(feature = "x", id = "category", bl_factory = BaselearnerPolynomial, intercept = FALSE)
-   cboost_lin$train(iter_max, trace = as.integer(iter_max / 4))
+   cboost_lin$train(iter_max, trace = 0)
   },
   "ridge" = {
    response = ResponseRegr$new("mpg", as.matrix(df_cat$y))
-
-   learning_rate = 0.05
-   iter_max      = 2000L
 
    cdata_source = CategoricalData$new(df_cat$x, "x")
    bl = BaselearnerCategoricalRidge$new(cdata_source, list(df = 3))
@@ -154,11 +151,14 @@ microbenchmark::microbenchmark(
      logger_list  = logger_list,
      optimizer    = optimizer
    )
-   cboost$train(trace = as.integer(iter_max / 4))
+   cboost$train(trace = 0)
   }, times = 20L
 )
 ```
 
+```{r, echo=FALSE}
+knitr::kable(as.data.frame(summary(mb)))
+```
 
 
 
