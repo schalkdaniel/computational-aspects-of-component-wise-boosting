@@ -1,0 +1,164 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "files-ridge-vs-linear/"
+)
+```
+
+# Ridge vs. Individual Linear Base-Learner
+
+## Load compboost
+
+```{r}
+devtools::load_all( "~/repos/compboost")
+```
+
+## Simulate data
+
+```{r, warnings=FALSE}
+# Simulate Data:
+nclasses = 10L
+nsim = 50000L
+
+classes = sample(x = LETTERS, size = nclasses)
+gmean = sample(nclasses) * rnorm(1)
+
+idx = sample(x = seq_len(nclasses), size = nsim, replace = TRUE)
+
+x = classes[idx]
+y = gmean[idx] + rnorm(nsim)
+
+df_cat = data.frame(x = x, y = y)
+
+library(ggplot2)
+ggplot(data = df_cat, aes(x = x, y = y, fill = x)) +
+  geom_boxplot(alpha = 0.4, show.legend = FALSE) +
+  scale_fill_brewer(palette = "Set1") +
+  xlab("Class") +
+  ylab("Value") +
+  ggtitle("Group Means")
+```
+
+## Set parameter for compboost
+
+```{r}
+learning_rate = 0.05
+iter_max      = 2000L
+```
+
+## Fit linear model for each category in feature (current state of the art)
+
+```{r}
+cboost_lin = Compboost$new(data = df_cat, target = "y", loss = LossQuadratic$new())
+cboost_lin$addBaselearner(feature = "x", id = "category", bl_factory = BaselearnerPolynomial, intercept = FALSE)
+cboost_lin$train(iter_max, trace = as.integer(iter_max / 4))
+```
+
+
+## Fit ridge regression on categorical feature
+
+```{r}
+response = ResponseRegr$new("mpg", as.matrix(df_cat$y))
+
+cdata_source = CategoricalData$new(df_cat$x, "x")
+bl = BaselearnerCategoricalRidge$new(cdata_source, list(df = 3))
+
+factory_list = BlearnerFactoryList$new()
+factory_list$registerFactory(bl)
+
+loss_quadratic = LossQuadratic$new()
+optimizer = OptimizerCoordinateDescent$new()
+
+log_iterations = LoggerIteration$new(" iterations", TRUE, iter_max)
+logger_list = LoggerList$new()
+logger_list$registerLogger(log_iterations)
+
+cboost_ridge = Compboost_internal$new(
+  response      = response,
+  learning_rate = learning_rate,
+  stop_if_all_stopper_fulfilled = FALSE,
+  factory_list = factory_list,
+  loss         = loss_quadratic,
+  logger_list  = logger_list,
+  optimizer    = optimizer
+)
+cboost_ridge$train(trace = as.integer(iter_max / 4))
+```
+
+```{r, echo=FALSE}
+cf_lin = unlist(cboost_lin$getEstimatedCoef())
+cf_lin = cf_lin[-length(cf_lin)] + cf_lin[length(cf_lin)]
+cf_ridge = as.vector(cboost_ridge$getEstimatedParameter()$x_x) + as.double(cboost_ridge$getOffset())
+
+knitr::kable(
+  data.frame("Real Means" = sort(gmean), "Estimate Ridge" = sort(cf_ridge), "Estimate Linear" = sort(cf_lin))
+)
+```
+
+## Microbenchmark
+
+
+```{r, echo=FALSE}
+nclasses = 20L
+nsim = 50000L
+
+classes = sample(x = LETTERS, size = nclasses)
+gmean = sample(nclasses) * rnorm(1)
+
+idx = sample(x = seq_len(nclasses), size = nsim, replace = TRUE)
+
+x = classes[idx]
+y = gmean[idx] + rnorm(nsim)
+
+df_cat = data.frame(x = x, y = y)
+
+
+microbenchmark::microbenchmark(
+  "linear" = {
+   cboost_lin = Compboost$new(data = df_cat, target = "y", loss = LossQuadratic$new())
+   cboost_lin$addBaselearner(feature = "x", id = "category", bl_factory = BaselearnerPolynomial, intercept = FALSE)
+   cboost_lin$train(iter_max, trace = as.integer(iter_max / 4))
+  },
+  "ridge" = {
+   response = ResponseRegr$new("mpg", as.matrix(df_cat$y))
+
+   learning_rate = 0.05
+   iter_max      = 2000L
+
+   cdata_source = CategoricalData$new(df_cat$x, "x")
+   bl = BaselearnerCategoricalRidge$new(cdata_source, list(df = 3))
+
+   factory_list = BlearnerFactoryList$new()
+   factory_list$registerFactory(bl)
+
+   loss_quadratic = LossQuadratic$new()
+   optimizer = OptimizerCoordinateDescent$new()
+
+   log_iterations = LoggerIteration$new(" iterations", TRUE, iter_max)
+   logger_list = LoggerList$new()
+   logger_list$registerLogger(log_iterations)
+
+   cboost = Compboost_internal$new(
+     response      = response,
+     learning_rate = learning_rate,
+     stop_if_all_stopper_fulfilled = FALSE,
+     factory_list = factory_list,
+     loss         = loss_quadratic,
+     logger_list  = logger_list,
+     optimizer    = optimizer
+   )
+   cboost$train(trace = as.integer(iter_max / 4))
+  }, times = 20L
+)
+```
+
+
+
+
