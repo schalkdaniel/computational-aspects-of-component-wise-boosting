@@ -53,14 +53,14 @@ iter_max      = 2000L
 cboost_lin = Compboost$new(data = df_cat, target = "y", loss = LossQuadratic$new())
 cboost_lin$addBaselearner(feature = "x", id = "category", bl_factory = BaselearnerPolynomial, intercept = FALSE)
 cboost_lin$train(iter_max, trace = as.integer(iter_max / 4))
-#>    1/2000   risk = 3.2  
+#>    1/2000   risk = 2.9  
 #>  500/2000   risk = 0.51  
 #> 1000/2000   risk = 0.5  
 #> 1500/2000   risk = 0.5  
 #> 2000/2000   risk = 0.5  
 #> 
 #> 
-#> Train 2000 iterations in 7 Seconds.
+#> Train 2000 iterations in 8 Seconds.
 #> Final risk based on the train set: 0.5
 ```
 
@@ -92,432 +92,33 @@ cboost_ridge = Compboost_internal$new(
   optimizer    = optimizer
 )
 cboost_ridge$train(trace = as.integer(iter_max / 4))
-#>    1/2000   risk = 3  
+#>    1/2000   risk = 2.7  
 #>  500/2000   risk = 0.5  
 #> 1000/2000   risk = 0.5  
 #> 1500/2000   risk = 0.5  
 #> 2000/2000   risk = 0.5  
 #> 
 #> 
-#> Train 2000 iterations in 5 Seconds.
+#> Train 2000 iterations in 4 Seconds.
 #> Final risk based on the train set: 0.5
 ```
 
 |                | Real.Means | Estimate.Ridge | Estimate.Linear |
 | -------------- | ---------: | -------------: | --------------: |
-| x\_D\_category |   \-8.1238 |       \-8.1197 |        \-8.1197 |
-| x\_E\_category |   \-7.3114 |       \-7.3088 |        \-7.3087 |
-| x\_I\_category |   \-6.4991 |       \-6.4779 |        \-6.4778 |
-| x\_U\_category |   \-5.6867 |       \-5.6625 |        \-5.6624 |
-| x\_P\_category |   \-4.8743 |       \-4.8767 |        \-4.8766 |
-| x\_C\_category |   \-4.0619 |       \-4.0777 |        \-4.0777 |
-| x\_Q\_category |   \-3.2495 |       \-3.2596 |        \-3.2596 |
-| x\_Z\_category |   \-2.4371 |       \-2.4190 |        \-2.4190 |
-| x\_L\_category |   \-1.6248 |       \-1.6180 |        \-1.6181 |
-| x\_G\_category |   \-0.8124 |       \-0.8217 |        \-0.8218 |
+| x\_H\_category |     0.7681 |         0.7286 |          0.7287 |
+| x\_R\_category |     1.5363 |         1.5294 |          1.5294 |
+| x\_Q\_category |     2.3044 |         2.2935 |          2.2935 |
+| x\_B\_category |     3.0725 |         3.0844 |          3.0845 |
+| x\_D\_category |     3.8406 |         3.8406 |          3.8406 |
+| x\_K\_category |     4.6088 |         4.5919 |          4.5919 |
+| x\_E\_category |     5.3769 |         5.3832 |          5.3831 |
+| x\_Y\_category |     6.1450 |         6.1616 |          6.1615 |
+| x\_I\_category |     6.9132 |         6.9237 |          6.9237 |
+| x\_C\_category |     7.6813 |         7.6887 |          7.6886 |
 
 ## Microbenchmark
 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.51  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 13 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.5  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 4 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.51  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 12 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.5  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 4 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.5  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 4 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.51  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 13 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.51  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 13 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.5  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 4 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.5  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 5 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.51  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 13 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.5  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 5 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.51  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 14 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.51  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 11 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.51  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 11 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.5  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 4 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.5  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 4 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.51  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 12 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.51  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 12 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.5  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 5 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.51  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 12 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.51  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 12 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.5  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 4 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.5  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 5 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.5  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 5 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.51  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 16 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.5  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 6 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.5  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 4 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.5  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 4 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.51  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 12 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.5  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 4 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.51  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 12 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.5  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 5 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.51  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 13 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.51  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 14 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.5  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 4 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.5  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 4 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.51  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 12 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.5  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 5 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.51  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 17 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> 
-    #>    1/2000   risk = 0.53  
-    #>  500/2000   risk = 0.51  
-    #> 1000/2000   risk = 0.5  
-    #> 1500/2000   risk = 0.5  
-    #> 2000/2000   risk = 0.5  
-    #> 
-    #> 
-    #> Train 2000 iterations in 13 Seconds.
-    #> Final risk based on the train set: 0.5
-    #> Unit: seconds
-    #>    expr    min     lq  mean median     uq    max neval
-    #>  linear 11.428 12.496 13.43 13.224 13.717 17.793    20
-    #>   ridge  4.451  4.584  4.91  4.766  5.157  6.052    20
+| expr   |    min |     lq |   mean | median |     uq |    max | neval |
+| :----- | -----: | -----: | -----: | -----: | -----: | -----: | ----: |
+| linear | 12.353 | 13.759 | 14.212 | 14.181 | 14.826 | 17.474 |    20 |
+| ridge  |  4.227 |  4.588 |  4.761 |  4.804 |  4.917 |  5.117 |    20 |
