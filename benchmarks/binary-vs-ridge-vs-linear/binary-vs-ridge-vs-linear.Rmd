@@ -12,11 +12,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Ridge vs. Individual Linear Base-Learner
+# Binary vs. Ridge vs. Individual Linear Base-Learner
 
 ## Load compboost
 
 ```{r}
+Rcpp::compileAttributes("~/repos/compboost")
 devtools::load_all( "~/repos/compboost")
 ```
 
@@ -92,13 +93,47 @@ cboost_ridge = Compboost_internal$new(
 cboost_ridge$train(trace = as.integer(iter_max / 4))
 ```
 
+## Fit ridge regression on categorical feature with binary base-learner
+
+```{r}
+response = ResponseRegr$new("mpg", as.matrix(df_cat$y))
+
+cdata_source = CategoricalData$new(df_cat$x, "x")
+
+bl_list = lapply(classes, function (cl) BaselearnerCategoricalBinary$new(cdata_source, cl))
+
+factory_list = BlearnerFactoryList$new()
+temp = lapply(bl_list, function (bl) factory_list$registerFactory(bl))
+
+loss_quadratic = LossQuadratic$new()
+optimizer = OptimizerCoordinateDescent$new()
+
+log_iterations = LoggerIteration$new(" iterations", TRUE, iter_max)
+logger_list = LoggerList$new()
+logger_list$registerLogger(log_iterations)
+
+cboost_binary = Compboost_internal$new(
+  response      = response,
+  learning_rate = learning_rate,
+  stop_if_all_stopper_fulfilled = FALSE,
+  factory_list = factory_list,
+  loss         = loss_quadratic,
+  logger_list  = logger_list,
+  optimizer    = optimizer
+)
+cboost_binary$train(trace = as.integer(iter_max / 4))
+```
+
+## Compare Estimates
+
 ```{r, echo=FALSE}
 cf_lin = unlist(cboost_lin$getEstimatedCoef())
 cf_lin = cf_lin[-length(cf_lin)] + cf_lin[length(cf_lin)]
 cf_ridge = as.vector(cboost_ridge$getEstimatedParameter()$x_x) + as.double(cboost_ridge$getOffset())
+cf_binary = unlist(cboost_binary$getEstimatedParameter()) + as.double(cboost_binary$getOffset())
 
 knitr::kable(
-  data.frame("Real Means" = sort(gmean), "Estimate Ridge" = sort(cf_ridge), "Estimate Linear" = sort(cf_lin))
+  data.frame("Real Means" = sort(gmean), "Estimate Ridge" = sort(cf_ridge), "Estimate Binary" = sort(cf_binary), "Estimate Linear (Binary)" = sort(cf_lin))
 )
 ```
 
