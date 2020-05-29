@@ -6,7 +6,7 @@
 devtools::load_all( "~/repos/compboost")
 
 nclasses = 10L
-nsim = 20000L
+nsim = 500000L
 
 classes = sample(x = LETTERS, size = nclasses)
 gmean = sample(nclasses) * rnorm(1)
@@ -19,7 +19,7 @@ y = gmean[idx] + rnorm(nsim)
 df_cat = data.frame(x = x, y = y)
 
 learning_rate = 0.05
-iter_max      = 200L
+iter_max      = 1000L
 
 response = ResponseRegr$new("mpg", as.matrix(df_cat$y))
 
@@ -48,3 +48,12 @@ cboost_binary = Compboost_internal$new(
 )
 cboost_binary$train(trace = as.integer(iter_max / 4))
 
+
+
+
+mem_consumption = data.frame(
+  run = c(1),
+  before_init = c(2636),
+  before_train = c(2641)
+  after = c(2649)
+)
