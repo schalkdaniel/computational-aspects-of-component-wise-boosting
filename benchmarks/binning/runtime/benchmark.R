@@ -54,25 +54,38 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 
+# Find font with `fc-list | grep "Gyre Bonum"`
+sysfonts::font_add("Gyre Bonum",
+    regular = "/usr/share/texmf-dist/fonts/opentype/public/tex-gyre/texgyrebonum-regular.otf",
+    bold = "/usr/share/texmf-dist/fonts/opentype/public/tex-gyre/texgyrebonum-bold.otf")
+showtext::showtext_auto()
+
+font_scale = 3
+
 p = bm %>%
   group_by(nrows, ncols, iter, rep) %>%
   mutate(seconds = init + fit) %>%
   summarize(fac = seconds[method == "No"] / seconds[method == "Yes"]) %>%
   ggplot(aes(x = as.factor(iter), y = fac, color = as.factor(nrows))) +
     geom_violin(show.legend = FALSE, fill = NA) +
-    stat_summary(fun = median, geom = "smooth", aes(group = 0), lwd = 1, show.legend = FALSE) +
+    stat_summary(fun = median, geom = "line", aes(group = 0), lwd = 1, alpha = 0.7, show.legend = FALSE) +
     geom_jitter(alpha = 0.6, width = 0.1, stroke = 0, show.legend = FALSE) +
     xlab("Number of iterations") +
     ylab("Relative speedup with binning\ncompared to no binning") +
-    theme_minimal() +
+    theme_minimal(base_family = "Gyre Bonum") +
     scale_color_brewer(palette = "Set1") +
     scale_y_continuous(breaks = c(0, 5, 10)) +
+      scale_x_discrete(breaks = c(200,400,600,800,1000)) +
     facet_grid(reorder(paste0("n = ", ncols), ncols) ~ reorder(paste0("p = ", nrows), nrows)) +
     theme(
       strip.background = element_rect(fill = rgb(47,79,79,maxColorValue = 255), color = "white"),
-      strip.text = element_text(color = "white", face = "bold"),
-      axis.text.x = element_text(angle = 45, vjust = 0.5)
+      strip.text = element_text(color = "white", face = "bold", size = 8 * font_scale),
+      axis.text.x = element_text(angle = 45, vjust = 0.5),
+      axis.text = element_text(size = 8 * font_scale),
+      axis.title = element_text(size = 10 * font_scale)
     )
 
-ggsave(plot = p, filename = "bin_vs_nobin.pdf", width = 10, height = 10)
+dinA4width = 210 * font_scale
+ggsave(plot = p, filename = "bin_vs_nobin.pdf", width = dinA4width * 2/3, height = dinA4width * 2/3, units = "mm")
+
 
