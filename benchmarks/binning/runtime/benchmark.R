@@ -76,7 +76,7 @@ p = bm %>%
     scale_color_brewer(palette = "Set1") +
     scale_y_continuous(breaks = c(0, 5, 10)) +
       scale_x_discrete(breaks = c(200,400,600,800,1000)) +
-    facet_grid(reorder(paste0("n = ", ncols), ncols) ~ reorder(paste0("p = ", nrows), nrows)) +
+    facet_grid(reorder(paste0("p = ", ncols), ncols) ~ reorder(paste0("n = ", nrows), nrows)) +
     theme(
       strip.background = element_rect(fill = rgb(47,79,79,maxColorValue = 255), color = "white"),
       strip.text = element_text(color = "white", face = "bold", size = 8 * font_scale),
