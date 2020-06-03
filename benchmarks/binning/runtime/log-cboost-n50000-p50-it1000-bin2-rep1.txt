@@ -1,0 +1,66 @@
+==47895== Massif, a heap profiler
+==47895== Copyright (C) 2003-2017, and GNU GPL'd, by Nicholas Nethercote
+==47895== Using Valgrind-3.15.0-608cb11914-20190413X and LibVEX; rerun with -h for copyright info
+==47895== Command: /usr/bin/rm -Rf /tmp/RtmpQ1Z2t2
+==47895== Parent PID: 47753
+==47895== 
+--47895-- 
+--47895-- Valgrind options:
+--47895--    --tool=massif
+--47895--    --threshold=0
+--47895--    --detailed-freq=1
+--47895--    --time-unit=B
+--47895--    --pages-as-heap=yes
+--47895--    --verbose
+--47895--    --trace-children=yes
+--47895--    --massif-out-file=massif.out.n50000-p50-it1000-bin2-rep1
+--47895--    --log-file=log-cboost-n50000-p50-it1000-bin2-rep1.txt
+--47895-- Contents of /proc/version:
+--47895--   Linux version 5.6.10-arch1-1 (linux@archlinux) (gcc version 9.3.0 (Arch Linux 9.3.0-1)) #1 SMP PREEMPT Sat, 02 May 2020 19:11:54 +0000
+--47895-- 
+--47895-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3-ssse3-avx-avx2-bmi-f16c-rdrand
+--47895-- Page sizes: currently 4096, max supported 4096
+--47895-- Valgrind library directory: /usr/lib/valgrind
+--47895-- Massif: alloc-fns:
+--47895-- Massif:   malloc
+--47895-- Massif:   __builtin_new
+--47895-- Massif:   operator new(unsigned)
+--47895-- Massif:   operator new(unsigned long)
+--47895-- Massif:   __builtin_vec_new
+--47895-- Massif:   operator new[](unsigned)
+--47895-- Massif:   operator new[](unsigned long)
+--47895-- Massif:   calloc
+--47895-- Massif:   realloc
+--47895-- Massif:   memalign
+--47895-- Massif:   posix_memalign
+--47895-- Massif:   valloc
+--47895-- Massif:   operator new(unsigned, std::nothrow_t const&)
+--47895-- Massif:   operator new[](unsigned, std::nothrow_t const&)
+--47895-- Massif:   operator new(unsigned long, std::nothrow_t const&)
+--47895-- Massif:   operator new[](unsigned long, std::nothrow_t const&)
+--47895-- Massif: ignore-fns:
+--47895-- Massif:   <empty>
+--47895-- Reading syms from /usr/bin/rm
+--47895--    object doesn't have a symbol table
+--47895-- Reading syms from /usr/lib/ld-2.31.so
+--47895-- Reading syms from /usr/lib/valgrind/massif-amd64-linux
+--47895--    object doesn't have a dynamic symbol table
+--47895-- Scheduler: using generic scheduler lock implementation.
+==47895== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-47895-by-daniel-on-???
+==47895== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-47895-by-daniel-on-???
+==47895== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-47895-by-daniel-on-???
+==47895== 
+==47895== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==47895== don't want to do, unless you know exactly what you're doing,
+==47895== or are doing some strange experiment):
+==47895==   /usr/lib/valgrind/../../bin/vgdb --pid=47895 ...command...
+==47895== 
+==47895== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==47895==   /path/to/gdb /usr/bin/rm
+==47895== and then give GDB the following command
+==47895==   target remote | /usr/lib/valgrind/../../bin/vgdb --pid=47895
+==47895== --pid is optional if only one valgrind process is running
+==47895== 
+--47895-- Reading syms from /usr/lib/valgrind/vgpreload_core-amd64-linux.so
+--47895-- Reading syms from /usr/lib/libc-2.31.so
+==47895== 

@@ -46,7 +46,7 @@ for (n in nobs) {
   }
 }
 
-save(ll_times, file = "ll_times.Rda")
+# save(ll_times, file = "ll_times.Rda")
 load("ll_times.Rda")
 bm = do.call(rbind, ll_times)
 
