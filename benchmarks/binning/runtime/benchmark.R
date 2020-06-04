@@ -89,3 +89,52 @@ dinA4width = 210 * font_scale
 ggsave(plot = p, filename = "bin_vs_nobin.pdf", width = dinA4width * 2/3, height = dinA4width * 2/3, units = "mm")
 
 
+
+
+
+
+
+
+bm_sum = bm %>%
+  group_by(nrows, ncols, iter, rep) %>%
+  mutate(seconds = init + fit) %>%
+  summarize(fac = seconds[method == "No"] / seconds[method == "Yes"]) %>%
+  filter(iter %in% c(200,900))
+#   summarize(fac = median(fac)) %>%
+#   group_by(nrows, ncols, iter) %>%
+
+ll_labs = lapply(unique(bm_sum$iter), function (i) {
+  bm_temp = bm_sum[bm_sum$iter == i,]
+  mods = lapply(unique(bm_temp$ncols), function (p) {
+    mod = nls(fac ~ b + nrows^a, data = bm_temp[bm_temp$ncols == p,])
+    pred = predict(mod, newdata = data.frame(nrows = 50000))
+    return (data.frame(p = p, x = 50000, y = pred, a = coef(mod)["a"], b = coef(mod)["b"]))
+  })
+
+  df_labs = do.call(rbind, mods)
+  df_labs$label = paste0("a = ", round(df_labs$a, 3))
+  df_labs$ncols = df_labs$p
+  df_labs$iter = i
+
+  df_labs
+})
+df_labs = do.call(rbind, ll_labs)
+
+bm_sum %>%
+  ggplot(aes(x = nrows, y = fac, color = as.factor(ncols))) +
+    geom_point() +
+#     geom_smooth(method = "nls", formula = formula(y ~ b + x^a), method.args = list(start = c(a = 0.5, b = 0, c = 0))) +
+    geom_smooth(method = "nls", formula = formula(y ~ 1 + x^b), se = FALSE) +
+    geom_label(data = df_labs, aes(x = x, y = y, label = label), size = 7, show.legend = FALSE) +
+    theme_minimal(base_family = "Gyre Bonum") +
+    scale_color_brewer(palette = "Set1") +
+    facet_grid(iter ~ .) +
+    theme(
+      strip.background = element_rect(fill = rgb(47,79,79,maxColorValue = 255), color = "white"),
+      strip.text = element_text(color = "white", face = "bold", size = 8 * font_scale),
+      axis.text.x = element_text(angle = 45, vjust = 0.5),
+      axis.text = element_text(size = 8 * font_scale),
+      axis.title = element_text(size = 10 * font_scale)
+    )
+
+
